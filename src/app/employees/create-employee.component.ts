@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Department } from '../models/department.model';
 import { Employee } from '../models/employee.model';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { EmployeeService } from './employee.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -12,23 +14,13 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 })
 export class CreateEmployeeComponent implements OnInit {
 
+  @ViewChild('employeeForm', { static: false }) public createemployee: NgForm;
   datepickerconfig: Partial<BsDatepickerConfig>;
   colorTheme = 'theme-dark-blue';
   PreviewImage = false;
+  employee: Employee;
 
 
-  employee: Employee = {
-    id: null,
-    name: null,
-    gender: null,
-    contactPreference: null,
-    phoneNumber: null,
-    email: null,
-    dateOfBirth: null,
-    department: null,
-    isActive: null,
-    photoPath: null
-  };
   departments: Department[] = [
     { id: 1, name: 'Help Desk' },
     { id: 2, name: 'HR' },
@@ -36,7 +28,8 @@ export class CreateEmployeeComponent implements OnInit {
     { id: 4, name: 'Payroll' }
   ];
 
-  constructor() {
+  // tslint:disable-next-line:variable-name
+  constructor(private _employeeservice: EmployeeService, private _route: Router, private _router: ActivatedRoute) {
     this.datepickerconfig = Object.assign({}, { containerClass: this.colorTheme, showWeekNUmbers: false });
   }
 
@@ -44,11 +37,39 @@ export class CreateEmployeeComponent implements OnInit {
     this.PreviewImage = !this.PreviewImage;
   }
 
-  saveEmployee(employeeForm: Employee): void {
-    console.log(employeeForm);
+  saveEmployee(): void {
+    const newEmployee: Employee = Object.assign({}, this.employee);
+    this._employeeservice.saveEmployee(newEmployee);
+    this.createemployee.reset();
+    this._route.navigate(['list']);
   }
 
   ngOnInit() {
+    this._router.paramMap.subscribe(pMap => {
+      const id = +pMap.get('id');
+      this.getEmployee(id);
+    });
+  }
+
+  private getEmployee(id: number) {
+    if (id === 0) {
+      this.employee = {
+        id: null,
+        name: null,
+        gender: null,
+        contactPreference: null,
+        phoneNumber: null,
+        email: '',
+        dateOfBirth: null,
+        department: '-1',
+        isActive: null,
+        photoPath: null,
+        password: null,
+        confirmPassword: null
+      };
+    } else {
+      this.employee = this._employeeservice.getEmployeeDtl(id);
+    }
   }
 
 }

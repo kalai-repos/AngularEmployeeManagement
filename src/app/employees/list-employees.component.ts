@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Employee } from '../models/employee.model';
+import { EmployeeService } from '../employees/employee.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -10,49 +12,50 @@ import { Employee } from '../models/employee.model';
 export class ListEmployeesComponent implements OnInit {
 
 
+  // tslint:disable-next-line:variable-name
+  constructor(private _employeeService: EmployeeService, private _router: Router, private _route: ActivatedRoute) {
+    this.employees = this._route.snapshot.data.employeeList;
+    if (this.employees) { this.displayEmployee = this.employees[0]; }
+  }
 
-  employees: Employee[] = [
-    {
-      id: 1,
-      name: 'Mark',
-      gender: 'Male',
-      contactPreference: 'Email',
-      email: 'mark@pragimtech.com',
-      dateOfBirth: new Date('10/25/1988'),
-      department: 'IT',
-      isActive: true,
-      photoPath: 'assets/images/mark.png'
-    },
-    {
-      id: 2,
-      name: 'Mary',
-      gender: 'Female',
-      contactPreference: 'Phone',
-      phoneNumber: 2345978640,
-      dateOfBirth: new Date('11/20/1979'),
-      department: 'HR',
-      isActive: true,
-      photoPath: 'assets/images/mary.png'
-    },
-    {
-      id: 3,
-      name: 'John',
-      gender: 'Male',
-      contactPreference: 'Phone',
-      phoneNumber: 5432978640,
-      dateOfBirth: new Date('3/25/1976'),
-      department: 'IT',
-      isActive: false,
-      photoPath: 'assets/images/john.png'
-    },
-  ];
+  employees: Employee[];
+  displayEmployee: Employee;
+  private arrayofIndex = 1;
+  dataFromChild: Employee;
 
 
-
-
-  constructor() { }
+  // tslint:disable-next-line:variable-name
+  private _searchTerm: string;
+  get searchTerm(): string {
+    return this._searchTerm;
+  }
+  set searchTerm(value: string) {
+    this._searchTerm = value;
+    // this.filteredEmployees = this.filtereEmployees(value);
+  }
 
   ngOnInit() {
+    // this._employeeService.getEmployee().subscribe((empList) => {
+    // this.employees = empList;
+    // this.displayEmployee = this.employees[0];
+    // });
+  }
+
+  nextEmployee(): void {
+    if (this.arrayofIndex < this.employees.length) {
+      this.displayEmployee = this.employees[this.arrayofIndex];
+      this.arrayofIndex++;
+    } else {
+      this.displayEmployee = this.employees[0];
+      this.arrayofIndex = 1;
+    }
+  }
+  handleNOtify(eventchange: Employee) {
+    this.dataFromChild = eventchange;
+  }
+
+  onClick(id: number): void {
+    this._router.navigate(['/employee', id], { queryParams: { SearchTerm: this.searchTerm, testparam: '0' } });
   }
 
 }

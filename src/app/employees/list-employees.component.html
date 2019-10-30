@@ -1,65 +1,29 @@
-<div class="card bg-primary" *ngFor="let employee of employees">
-  <div class="card-header">
-    <h3 class="card-title">{{ employee.name }}</h3>
-  </div>
-  <div class="card-body">
-    <div class="col-12">
-      <div class="row vertical-align">
-        <div class="col-4">
-          <img class="imageClass" [src]="employee.photoPath" alt="" />
-        </div>
-
-        <div class="col-8">
-          <div class="row">
-            <div class="col-6">
-              Gender
-            </div>
-            <div class="col-6">:{{ employee.gender }}</div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
-              Date of Birth
-            </div>
-            <div class="col-6">:{{ employee.dateOfBirth }}</div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
-              Contact preference
-            </div>
-            <div class="col-6">:{{ employee.contactPreference }}</div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
-              phone
-            </div>
-            <div class="col-6">:{{ employee.phoneNumber }}</div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
-              Email
-            </div>
-            <div class="col-6">:{{ employee.email }}</div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
-              Department
-            </div>
-            <div class="col-6">:{{ employee.department }}</div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
-              Is Active
-            </div>
-            <div class="col-6">:{{ employee.isActive }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="form-group">
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Search By Name"
+    style="width: 300px"
+    [(ngModel)]="searchTerm"
+  />
 </div>
+<h1 *ngIf="dataFromChild">
+  {{ dataFromChild?.name + "" + dataFromChild?.gender }}
+</h1>
+<div *ngFor="let employee of employees | employeeFilter: searchTerm">
+  <!-- <div (click)="onClick(employee.id)" class="pointerCursor"> -->
+    <app-display-employee
+      [employee]="employee" [searchTerm]="searchTerm"
+      (notify)="handleNOtify($event)"
+    ></app-display-employee>
+  <!-- </div> -->
+</div>
+
+<!-- <button class="btn btn-primary" (click)="nextEmployee()">
+  Move Next
+</button>
+<br /><br /><br />
+
+<div class="card bg-primary">
+  <app-display-employee [employee]="displayEmployee"[employeeId]="displayEmployee.id" ></app-display-employee>
+</div> -->
