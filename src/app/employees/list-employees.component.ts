@@ -54,6 +54,12 @@ export class ListEmployeesComponent implements OnInit {
     this.dataFromChild = eventchange;
   }
 
+  onNofificationDeleteEvent(id: number) {
+    const foundIndex = this.employees.findIndex(e => e.id === id);
+    if (foundIndex !== -1) {
+      this.employees.splice(foundIndex, 1);
+    }
+  }
   onClick(id: number): void {
     this._router.navigate(['/employee', id], { queryParams: { SearchTerm: this.searchTerm, testparam: '0' } });
   }

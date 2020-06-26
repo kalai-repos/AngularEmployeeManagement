@@ -17,6 +17,7 @@ export class CreateEmployeeComponent implements OnInit {
   @ViewChild('employeeForm', { static: false }) public createemployee: NgForm;
   datepickerconfig: Partial<BsDatepickerConfig>;
   colorTheme = 'theme-dark-blue';
+  paneltitle: string;
   PreviewImage = false;
   employee: Employee;
 
@@ -67,7 +68,10 @@ export class CreateEmployeeComponent implements OnInit {
         password: null,
         confirmPassword: null
       };
+      this.paneltitle = 'Create Employee';
+      this.createemployee.reset();
     } else {
+      this.paneltitle = 'Edit Employee';
       this.employee = this._employeeservice.getEmployeeDtl(id);
     }
   }

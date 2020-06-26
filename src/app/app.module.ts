@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { HttpClientModule } from '@angular/common/http';
 
 import { FormsModule } from '@angular/forms';
 import { EmployeeService } from './employee.service';
@@ -20,6 +21,9 @@ import { EmployeeFilterPipe } from './filters/employee-filter.pipe';
 import { EmployeeListResloverService } from './filters/employee-list-reslover-service';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { EmployeeDeatilGuard } from './shared/employee-deatil.guard';
+import { AccordionComponent } from './shared/accordion.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 
@@ -34,14 +38,17 @@ import { EmployeeDeatilGuard } from './shared/employee-deatil.guard';
     DisplayEmployeeComponent,
     EmployeeDetailsComponent,
     EmployeeFilterPipe,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    AccordionComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     BsDatepickerModule.forRoot(),
-    FormsModule
+    FormsModule,
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [EmployeeService, CreateEmployeeCanDeactivateGuardService, EmployeeListResloverService, EmployeeDeatilGuard],
   bootstrap: [AppComponent]

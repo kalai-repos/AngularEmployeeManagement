@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Employee } from '../models/employee.model';
 import { Observable, of } from 'rxjs';
 import { delay, takeUntil } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable({
@@ -39,6 +40,7 @@ export class EmployeeService {
   ];
 
   getEmployee(): Observable<Employee[]> {
+    // this.httpClient.get('http://localhost:3000/employees');
     return of(this.listEmployees).pipe(delay(2000));
   }
   getEmployeeDtl(id: number): Employee {
@@ -46,8 +48,25 @@ export class EmployeeService {
     return this.listEmployees.find(e => e.id == id);
   }
   saveEmployee(employee: Employee) {
-    this.listEmployees.push(employee);
+    if (employee.id === null) {
+      // tslint:disable-next-line:only-arrow-functions
+      const maxId = this.listEmployees.reduce(function(e1, e2) {
+        return (e1 > e2) ? e1 : e2;
+      }).id;
+      employee.id = maxId + 1;
+      this.listEmployees.push(employee);
+    } else {
+      const foundIndex = this.listEmployees.findIndex(e => e.id === employee.id);
+      this.listEmployees[foundIndex] = employee;
+    }
   }
 
-  constructor() { }
+  deleteEMployee(id: number) {
+    const foundIndex = this.listEmployees.findIndex(e => e.id === id);
+    if (foundIndex !== -1) {
+      this.listEmployees.splice(foundIndex, 1);
+    }
+  }
+
+  constructor(private httpClient: HttpClient) { }
 }

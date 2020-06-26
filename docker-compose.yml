@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  angularlearningproject:
+    image: angularlearningproject
+    build: .
+    ports:
+      - 8080

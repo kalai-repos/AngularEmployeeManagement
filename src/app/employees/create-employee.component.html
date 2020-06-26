@@ -2,7 +2,7 @@
   <div class="bg-light">
     <div class="card text-white bg-primary">
       <div class="card-header">
-        <h3 class="card-title">Create Employee</h3>
+        <h3 class="card-title">{{ paneltitle }}</h3>
       </div>
     </div>
     <div class="card-body">
@@ -174,8 +174,7 @@
 
         <span
           class="alert-danger"
-          *ngIf="department.touched && department?.errors?.defaultSelected"
-        >
+          *ngIf="department.touched && department?.errors?.defaultSelected">
           Department is Required
         </span>
       </div>
@@ -208,7 +207,11 @@
       </div>
 
       <div class="form-group">
-        <button class="btn btn-primary" (click)="showImages()">
+        <button
+          class="btn btn-primary"
+          (click)="showImages()"
+          *ngIf="employee.photoPath !== '' && employee.photoPath !== null"
+        >
           {{ PreviewImage ? "Hide" : "show" }} Preview
         </button>
       </div>
@@ -218,7 +221,11 @@
           [src]="employee.photoPath"
           height="200"
           width="200"
-          *ngIf="PreviewImage"
+          *ngIf="
+            PreviewImage &&
+            employee.photoPath !== '' &&
+            employee.photoPath !== null
+          "
         />
       </div>
       <div

@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  angularlearningproject:
+    image: angularlearningproject
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8084:80
